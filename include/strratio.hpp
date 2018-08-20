@@ -15,6 +15,8 @@ namespace budda {
 
 template<class T> constexpr char const* strratio() = delete;
 
+template<> constexpr char const* strratio<std::ratio<1, 1>>() { return "";  }
+
 template<> constexpr char const* strratio<std::yocto>() { return "yocto"; }
 template<> constexpr char const* strratio<std::zepto>() { return "zepto"; }
 template<> constexpr char const* strratio<std::atto>()  { return "atto";  }
