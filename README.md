@@ -28,12 +28,11 @@ Simply `#include` the library into your C++ program and call the
 
 void process() {
   using clock = std::chrono::system_clock; // here you decide the type
-  // from now on it there is only generic code :)
+  // from now on there is only generic code :)
 
   auto const start = clock::now();
 
   do_stuff();
-
   auto const stop = clock::now();
   auto const delta = stop - start;
 
