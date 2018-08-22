@@ -5,25 +5,37 @@
 
 using namespace std::chrono_literals;
 
-template<class Duration>
-struct with_unit
+namespace {
+
+inline
+int dur_i()
 {
-  Duration const& internal;
+  auto static const i = std::ios_base::xalloc();
+  return i;
+}
 
-  with_unit(Duration const& d)
-  : internal(d)
-  {}
-};
+} // anonymous ns
 
-template<class Duration>
+template<class Rep, class Period>
 std::ostream& operator <<(
     std::ostream& stream
-  , with_unit<Duration> const& wu
+  , std::chrono::duration<Rep, Period> const& d
 ) {
-  using namespace budda;
-  return stream
-    << wu.internal.count() << ' '
-    << strratio<typename Duration::period>() << "seconds";
+  if (stream.iword(dur_i())) {
+    stream.iword(dur_i()) = 0;
+
+    return stream
+      << d.count() << ' '
+      << budda::strratio<Period>() << "seconds";
+  } else {
+    return stream << d.count();
+  }
+}
+
+std::ostream& with_unit(std::ostream& stream)
+{
+  stream.iword(dur_i()) = 1;
+  return stream;
 }
 
 int main()
@@ -33,6 +45,6 @@ int main()
 
   auto const relation = t1 > t2 ? " is greater than " : " is less than ";
 
-  std::cout << with_unit{t1} << relation << with_unit{t2} << '\n';
+  std::cout << with_unit << t1 << relation << with_unit << t2 << '\n';
 }
 
